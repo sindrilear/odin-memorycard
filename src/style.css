@@ -1,9 +1,15 @@
 html, body, #root {
     margin: 0;
     padding: 0;
-    background-color: #53a8b6;
+
     height: 100vh;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+html {
+    background-image: url('/src/assets/dogpaws.jpg');
+    background-repeat: no-repeat;
+    background-size:cover;
 }
 
 * {
@@ -47,7 +53,7 @@ h2 {
     flex-wrap:wrap;
     justify-content:center;
     align-items:center;
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -72,3 +78,10 @@ button:hover {
     background-color:#24527a ;
 }
 
+.dogcard {
+    cursor:pointer;
+}
+
+.dogcard:hover {
+    background-color:#24527a;
+}
