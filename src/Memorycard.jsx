@@ -1,38 +1,80 @@
 import React, { useState, useEffect } from "react";
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+
 function Memory() {
 
   const [data, setData] = useState([]);
 
-  /* useEffect(() => {
-    fetch('https://api.thedogapi.com/v1/images/search?limit=2&include_breeds=true', {
+  useEffect(() => {
+    fetch('https://api.thedogapi.com/v1/images/search?limit=8&include_breeds=true', {
       headers: {
         'x-api-key': 'live_lChPNOqzmhiF6Qka1LKbq6f7YLqnaa4kfr2UB0omhHKUPj4bJEBtiBEXUuUKkuJJ'
       }
     })
       .then(response => response.json())
-      .then(json => setData(json))
+      .then(json => {
+        const modifiedData = json.map(item => ({
+          ...item,
+          userClicked: false
+        }));
+        setData(modifiedData)
+      })
       .catch(error => console.error(error))
-  }, []); */
+  }, []);
 
-  useEffect(() => {
+/*   useEffect(() => {
     const testData = [
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" },
-      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png" }
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false},
+      { url: "https://cdn2.thedogapi.com/images/mVTsbAG4B.png", userClicked: false}
     ];
 
     setData(testData);
-  }, []);
+  }, []); */
 
-  console.log(data);
+  function randomize(data) {
+    shuffle(data);
+    const randomizedData = data.slice(0, 9);
+
+    return randomizedData;
+  }
+
+  function cardClicked(id, data) {
+    const dataSize = data.length;
+    const newData = data.map(item => {
+      if (item.id === id) {
+        return { ...item, userClicked: true }; 
+      } else {
+        return item;
+      }
+    });
+
+    return setData(newData);
+
+  }
+
   return (
     <>
       <header>
@@ -52,10 +94,9 @@ function Memory() {
       </header>
 
       <div class="dogCardsWrapper">
-        {data.map((dog, index) => (
-        <div key={index} className={`dogcard ${index}`}>
-          <img key={index} src={dog.url} width="180" height="180"/>
-
+        {randomize(data).map((dog, index) => (
+        <div key={index} className={`dogcard ${index}`} onClick={() => cardClicked(dog.id, data)}>
+            <img key={index} src={dog.url} width="180" height="180"/>
         <p>
           {dog.breeds && dog.breeds.length > 0
             ? dog.breeds[0].name
